@@ -50,3 +50,30 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+// Todo make a handleSubmitStory()
+async function handleSubmitStory(evt) {
+  console.debug("handleSubmitStory", evt);
+  evt.preventDefault();
+  // get the info from the form
+  const title = $("#title").val();
+  const author = $("#author").val();
+  const url = $("#url").val();
+  // call the addStory method on the storyList instance
+  try {
+    const newStory = await storyList.addStory(currentUser, {
+      title,
+      author,
+      url,
+    });
+    // generate the markup for the story
+    const $story = generateStoryMarkup(newStory);
+    // append the story to the DOM
+    $allStoriesList.prepend($story);
+  } catch (err) {
+    console.error("Error adding story", err);
+  }
+  
+}
+// todo handle the execution of the story submission
+$newStoryForm.on("submit", handleSubmitStory);

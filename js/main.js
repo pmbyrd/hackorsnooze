@@ -1,7 +1,7 @@
 "use strict";
 
-// So we don't have to keep re-finding things on page, find DOM elements once:
-
+// !So we don't have to keep re-finding things on page, find DOM elements once:
+// 
 const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
@@ -14,12 +14,17 @@ const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
 
+const $newStoryForm = $("#new-story-form");
+
+
+
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
  * calling this, individual components can re-show just what they want.
  */
 
 function hidePageComponents() {
+  // *all compenents that I want to hide
   const components = [
     $allStoriesList,
     $loginForm,
