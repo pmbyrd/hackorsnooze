@@ -53,27 +53,44 @@ function putStoriesOnPage() {
 
 // Todo make a handleSubmitStory()
 async function handleSubmitStory(evt) {
-  console.debug("handleSubmitStory", evt);
-  evt.preventDefault();
-  // get the info from the form
-  const title = $("#title").val();
-  const author = $("#author").val();
-  const url = $("#url").val();
-  // call the addStory method on the storyList instance
-  try {
-    const newStory = await storyList.addStory(currentUser, {
-      title,
-      author,
-      url,
-    });
-    // generate the markup for the story
-    const $story = generateStoryMarkup(newStory);
-    // append the story to the DOM
-    $allStoriesList.prepend($story);
-  } catch (err) {
-    console.error("Error adding story", err);
-  }
+  evt.preventDefault()
+  console.log("submitting story")
+  let title = $("#story-title").val();
+  let url = $("#story-url").val();
+  let author = $("#story-author").val();
   
+  console.log(title, url, author)
+  // to post a story a user must have valid credentials
+  let username = currentUser.username
+  let storyValues = {title: title, author: author, url: url, username: username}
+  // console.log(story)
+  try {
+    const newStory = await storyList.addStory(currentUser, storyValues)
+    // if a new story is successfully added to the story list 
+    // display a success message
+    if (newStory instanceof Story) {
+      // todo display a success message
+      console.log("success")
+      displayMessage("Story successfully added", "success")
+    } else {
+      // todo display an error message
+      console.log("error")
+      displayMessage("Story not added", err)
+    }
+      } catch (err) {
+        // !critical will throw an error if the url is not in valid format
+    console.log(err)
+  }
+  console.log("story submitted")
+  // hide the form
+  $newStoryForm.hide()
+  // show the story list
+  $allStoriesList.show()
+  // clear the form
+  $newStoryForm.trigger("reset")
 }
+
 // todo handle the execution of the story submission
+// $newStoryForm.on("submit", handleSubmitStory)
 $newStoryForm.on("submit", handleSubmitStory);
+

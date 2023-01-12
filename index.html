@@ -44,6 +44,9 @@
     <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
   </div>
 </nav>
+<section class="messages-container container">
+  <div id="messages" class="messages hidden"></div>
+</section>
 
 <!-- area for stories (all stories, user stories, favorites) -->
 <section class="stories-container container">
@@ -62,15 +65,15 @@
   <form id="new-story-form" method="post", action="#", class="new-story-form hidden">
     <div class="new-story-input">
       <label for="story-title">title</label>
-      <input id="story-title">
+      <input id="story-title", value="test-title">
     </div>
     <div class="new-story-input">
       <label for="story-url">url</label>
-      <input id="story-url">
+      <input id="story-url", value="https://code.visualstudio.com/docs/nodejs/browser-debugging">
     </div>
     <div class="new-story-input">
       <label for="story-author">author</label>
-      <input id="story-author">
+      <input id="story-author", value="test-author">
     <div class="new-story-input">  
       <button type="submit" class="story-btn">submit</button>
     </div>
@@ -92,7 +95,7 @@
       <label for="login-password">password</label>
       <input id="login-password" type="password" autocomplete="current-password">
     </div>
-    <button type="submit" class="submit-btn">login</button>
+    <button class="submit-btn">login</button>
     <hr>
   </form>
 
