@@ -78,7 +78,7 @@ async function handleSubmitStory(evt) {
       displayMessage("Story not added", err)
     }
       } catch (err) {
-        // !critical will throw an error if the url is not in valid format
+        // !critical will throw an error if the url is not in valid https: format
     console.log(err)
   }
   console.log("story submitted")
@@ -93,4 +93,13 @@ async function handleSubmitStory(evt) {
 // todo handle the execution of the story submission
 // $newStoryForm.on("submit", handleSubmitStory)
 $newStoryForm.on("submit", handleSubmitStory);
+
+// todo make a function to add and dislike a story
+// * this function will be called when a user clicks on the favorite icon
+// *for all stories add a favorite icon
+async function handleFavoriteStory(evt) {
+  // get the element where where each story is being displayed
+  const $story = evt.target.closest("li")
+
+}
 
