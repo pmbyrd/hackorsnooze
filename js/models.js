@@ -24,11 +24,11 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // TODO UNIMPLEMENTED: complete this function!
-    return "https://localhost:8000"
-    // return "hostname.com";
+    // UNIMPLEMENTED: complete this function!
+    return "hostname.com";
   }
 }
+
 
 /******************************************************************************
  * List of Story instances: used by UI to show story lists in DOM.
@@ -37,19 +37,6 @@ class Story {
 class StoryList {
   constructor(stories) {
     this.stories = stories;
-    //create a method that makes a post request that will take a templete
-    //for creating a new story  
-    // make a post request to the api to create a new story
-    
-    async function newStory({title, author, url}){
-      const response = await axios({
-        url: `${BASE_URL}/stories`,
-        method: "POST",
-        data: {title, author, url}
-      });
-    }
-    newStory({title, author, url})
-
   }
 
   /** Generate a new StoryList. It:
@@ -63,9 +50,8 @@ class StoryList {
   static async getStories() {
     // Note presence of `static` keyword: this indicates that getStories is
     //  **not** an instance method. Rather, it is a method that is called on the
-    //  class directly. 
-    // ?Why doesn't it make sense for getStories to be an instance method?
-    // *Because we want to get all the stories, not just one story. Then when a new story is created it adds it to the list of stories.
+    //  class directly. Why doesn't it make sense for getStories to be an
+    //  instance method?
 
     // query the /stories endpoint (no auth required)
     const response = await axios({
@@ -87,19 +73,54 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
-    // TODO UNIMPLEMENTED: complete this function!
+  //! to limit hardcoding pass params to the method
+  // hidden an example of the format of the data that should be sent in the request body
+  // {
+  //   "token": "YOUR_TOKEN_HERE",
+  //   "story": {
+  //     "author": "Matt Lane",
+  //     "title": "The best story ever",
+  //     "url": "http://google.com"
+  //   }
+  // }
+  // ?who adds the story? 
+  // *user  < - > token
+  // ?what is the story?
+  // *title, author, url < - > new Story instance
+  async addStory(user, {title, author, url}) {
+    // Todo UNIMPLEMENTED: complete this function!
+    // make a post request to /stories and create a new story
+    // *must use token of user who is posting story*
+    const token = user.loginToken;
+    const response = await axios({
+      method: "POST",
+      url : `${BASE_URL}/stories`,
+      data: {
+        token, story: {title, author, url}
+      }
+    });
+    // !create a new story instance and the story list
+    const story = new Story(response.data.story);
+    // append the stories to the story list present in order of newest to oldest
+    this.stories.unshift(story);
+    user.ownStories.unshift(story);
+    return story;
+   
+    // make a new story instance
   }
 }
 
+
 /******************************************************************************
- *! User: a user in the system (only used to represent the current user)
+ * User: a user in the system (only used to represent the current user)
  */
+
 class User {
   /** Make user instance from obj of user data and a token:
    *   - {username, name, createdAt, favorites[], ownStories[]}
    *   - token
    */
+
   constructor({
                 username,
                 name,
@@ -126,8 +147,7 @@ class User {
    * - password: a new password
    * - name: the user's full name
    */
-// Static methods are called on the class itself, not on an instance of the class.
-// Static methods are often used to create utility functions for an application.
+
   static async signup(username, password, name) {
     const response = await axios({
       url: `${BASE_URL}/signup`,
@@ -137,7 +157,6 @@ class User {
 
     let { user } = response.data
 
-    // !create a new user instance from the API response
     return new User(
       {
         username: user.username,
@@ -177,9 +196,8 @@ class User {
     );
   }
 
-  /**  
-   * !When we already have credentials (token & username) for a user,
-   *  ! we can log them in automatically. This function does that.
+  /** When we already have credentials (token & username) for a user,
+   *   we can log them in automatically. This function does that.
    */
 
   static async loginViaStoredCredentials(token, username) {
