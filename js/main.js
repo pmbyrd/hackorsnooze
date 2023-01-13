@@ -18,7 +18,7 @@ const $newStoryForm = $("#new-story-form");
 
 const $messages = $(".messages"); 
 const $favStories = $("#fav-stories");
-
+const $favoritesList = $("#favorites-list");
 
 
 

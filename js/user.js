@@ -119,11 +119,12 @@ function updateUIOnUserLogin() {
 // todo handle the click of the star icon
 $allStoriesList.on("click", ".fa-star", function(evt) {
   // console.log($target)
-  let favId = $(this).attr("data-story-id")
-  let favStory = storyList.stories.find(story => story.storyId === favId)
+  let $favId = $(this).attr("data-story-id")
+  let favStory = storyList.stories.find(story => story.storyId === $favId)
   let favStoryId = favStory.storyId
-  $(this).toggleClass("fas far")
- 
+  // !pay attn to the order of intialization.
+  // *it makes more sense to check if a story is already in the local storage
+  // this should be checked globally
   try {
     // use the star icon to add the story to the user's favorites
     if ($(this).hasClass("far")) {
@@ -135,15 +136,52 @@ $allStoriesList.on("click", ".fa-star", function(evt) {
   } catch (err) {
     console.error("story not added", err)
   }
-
+  
   try {
     if($(this).hasClass("fas")) {
       if (currentUser.favorites.includes(favStory)) {
         currentUser.favorites.splice(currentUser.favorites.indexOf(favStory), 1)
-        console.table(currentUser.favorites[length])
+        console.log("removed from favorites")
       }
     }
   } catch (err) {
     console.error("story not removed", err)
   }
+  console.table(currentUser.favorites)
+  $(this).toggleClass("fas far")
 })
+
+// todo handle the ui for favorite stories
+// $favStories.on("click", displayFavoriteStories)
+
+
+// todo check for favorited stories in the session storage
+/**
+ * 
+ * @returns {Array} an array of story ids 
+ */
+async function checkForFavoriteStories() {
+  if (currentUser === null) return
+  if (localStorage.getItem("favorites")) {
+    let favorites = JSON.parse(localStorage.getItem("favorites"))
+    let savedFavStories = favorites.map((story) => story.storyId)
+    return savedFavStories
+  }
+}
+
+// todo update the ui for the favorite stories
+async function updateFavoriteStories() {
+    try {
+        // 1 get the story ids from the local storage
+      let savedFavStories = await checkForFavoriteStories()
+      // 2 check if the story ids are in the story list
+      let favStories = storyList.stories.filter((story) => savedFavStories.includes(story.storyId))
+      console.log(favStories)
+      // 3 if the story ids are in the story list, add the star icon to the story
+    } catch (err) {
+        console.error("error", err)
+    }
+    
+}
+
+

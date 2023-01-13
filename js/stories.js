@@ -84,6 +84,8 @@ async function handleSubmitStory(evt) {
         // !critical will throw an error if the url is not in valid https: format
     console.log(err)
   }
+  // after a story is submitted call the putStoriesOnPage() function to display the new story
+  await putStoriesOnPage()
   // hide the form
   $newStoryForm.hide()
   // show the story list
@@ -94,3 +96,5 @@ async function handleSubmitStory(evt) {
 
 // todo handle the execution of the story submission
 $newStoryForm.on("submit", handleSubmitStory);
+
+
