@@ -56,6 +56,7 @@
   <div id="stories-loading-msg">Loading&hellip;</div>
 
   <!-- List of all stories -->
+  <!-- todo add the event listener to the stories list here that already exist in the dom.  if this class is clicked on that current target will look for its parent element and add it to the stories array -->
   <ol id="all-stories-list" class="stories-list"></ol>
 
 </section>
@@ -123,9 +124,18 @@
   </form>
 </section>
 
+<section class="favorites-container container hidden">
+  <h4>Favorites</h4>
+  <ol id="favorites-list" class="stories-list">
+    <!-- todo display favorite stories in this list -->
+  </ol>
+</section>
+
 <!-- Library JS & our JS -->
 <script src="https://unpkg.com/jquery"></script>
 <script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <script src="js/models.js"></script>
 <script src="js/main.js"></script>
 <script src="js/nav.js"></script>

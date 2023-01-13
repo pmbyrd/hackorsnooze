@@ -114,3 +114,36 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+// !user related logic goes here
+// todo handle the click of the star icon
+$allStoriesList.on("click", ".fa-star", function(evt) {
+  // console.log($target)
+  let favId = $(this).attr("data-story-id")
+  let favStory = storyList.stories.find(story => story.storyId === favId)
+  let favStoryId = favStory.storyId
+  $(this).toggleClass("fas far")
+ 
+  try {
+    // use the star icon to add the story to the user's favorites
+    if ($(this).hasClass("far")) {
+      currentUser.favorites.push(favStory)
+      console.log("added to favorites", currentUser.favorites.forEach((story) => {
+        console.log(favStory)
+      }));
+    }
+  } catch (err) {
+    console.error("story not added", err)
+  }
+
+  try {
+    if($(this).hasClass("fas")) {
+      if (currentUser.favorites.includes(favStory)) {
+        currentUser.favorites.splice(currentUser.favorites.indexOf(favStory), 1)
+        console.table(currentUser.favorites[length])
+      }
+    }
+  } catch (err) {
+    console.error("story not removed", err)
+  }
+})

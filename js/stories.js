@@ -20,12 +20,18 @@ async function getAndShowStoriesOnStart() {
  */
 // *this function was included in the original code
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
-  // const star = <i class="fa-regular fa-star"></i>
+  console.debug("generateStoryMarkup", story);
   const hostName = story.getHostName();
+
+
   return $(`
+      
       <li id="${story.storyId}">
-        <a href="#" class="star"><span class="star"> <i class="far fa-star"></i> </span></a>
+        <span class="fav">
+        <a href="#" class="star"> <i data-story-id="${story.storyId}" class="far fa-star"></i></a>
+        </i></a></span>
+        </label>
+        </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -33,21 +39,19 @@ function generateStoryMarkup(story) {
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>`);
+      
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
 function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
-
   $allStoriesList.empty();
-
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
-
   $allStoriesList.show();
 }
 
@@ -59,7 +63,6 @@ async function handleSubmitStory(evt) {
   let url = $("#story-url").val();
   let author = $("#story-author").val();
   
-  console.log(title, url, author)
   // to post a story a user must have valid credentials
   let username = currentUser.username
   let storyValues = {title: title, author: author, url: url, username: username}
@@ -81,7 +84,6 @@ async function handleSubmitStory(evt) {
         // !critical will throw an error if the url is not in valid https: format
     console.log(err)
   }
-  console.log("story submitted")
   // hide the form
   $newStoryForm.hide()
   // show the story list
@@ -91,17 +93,4 @@ async function handleSubmitStory(evt) {
 }
 
 // todo handle the execution of the story submission
-// $newStoryForm.on("submit", handleSubmitStory)
 $newStoryForm.on("submit", handleSubmitStory);
-
-// todo isFavorite() function to add and dislike a story
-// * this function will be called when a user clicks on the like link
-async function isFavorite() {
-  //if a user clicks the favorite link
-  // check if the story is already a favorite
-  // if it is a favorite remove it from the favorites list
-  // if it is not a favorite add it to the favorites list
-  
-}
-
-  

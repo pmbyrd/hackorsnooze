@@ -17,6 +17,8 @@ const $navLogOut = $("#nav-logout");
 const $newStoryForm = $("#new-story-form");
 
 const $messages = $(".messages"); 
+const $favStories = $("#fav-stories");
+
 
 
 
