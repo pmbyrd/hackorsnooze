@@ -80,6 +80,8 @@ async function checkForRememberedUser() {
 
   // try to log in with these credentials (will be null if login failed)
   currentUser = await User.loginViaStoredCredentials(token, username);
+
+  // 
 }
 
 /** Sync current user information to localStorage.
@@ -113,6 +115,8 @@ function updateUIOnUserLogin() {
   $allStoriesList.show();
 
   updateNavOnLogin();
+  updateFavoriteStories();
+ 
 }
 
 // !user related logic goes here
@@ -129,9 +133,7 @@ $allStoriesList.on("click", ".fa-star", function(evt) {
     // use the star icon to add the story to the user's favorites
     if ($(this).hasClass("far")) {
       currentUser.favorites.push(favStory)
-      console.log("added to favorites", currentUser.favorites.forEach((story) => {
-        console.log(favStory)
-      }));
+      console.log("added to favorites")
     }
   } catch (err) {
     console.error("story not added", err)
@@ -160,7 +162,7 @@ $allStoriesList.on("click", ".fa-star", function(evt) {
  * 
  * @returns {Array} an array of story ids 
  */
-async function checkForFavoriteStories() {
+function checkForFavoriteStories() {
   if (currentUser === null) return
   if (localStorage.getItem("favorites")) {
     let favorites = JSON.parse(localStorage.getItem("favorites"))
@@ -170,18 +172,23 @@ async function checkForFavoriteStories() {
 }
 
 // todo update the ui for the favorite stories
-async function updateFavoriteStories() {
+function updateFavoriteStories() {
     try {
         // 1 get the story ids from the local storage
-      let savedFavStories = await checkForFavoriteStories()
+      let savedFavStories = checkForFavoriteStories()
       // 2 check if the story ids are in the story list
       let favStories = storyList.stories.filter((story) => savedFavStories.includes(story.storyId))
       console.log(favStories)
       // 3 if the story ids are in the story list, add the star icon to the story
+      if (favStories.length > 0) {
+        favStories.forEach((story) => {
+          let $storyId = $(`[data-story-id="${story.storyId}"]`)
+          $storyId.toggleClass("fas far")
+        })
+      }
     } catch (err) {
         console.error("error", err)
-    }
-    
+    } 
 }
 
 
