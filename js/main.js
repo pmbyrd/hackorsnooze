@@ -27,7 +27,9 @@ const $favoritesList = $("#favorites-list");
  * calling this, individual components can re-show just what they want.
  */
 // make function to display messages
+
 function displayMessage(message, type) {
+  console.debug("displayMessage", message, type);
   const $message = $(`<div class="alert alert-${type}">${message}</div>`);
   $(".messages").show().append($message).text(message);
   // remove the message after 3 seconds

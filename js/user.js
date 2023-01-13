@@ -123,6 +123,14 @@ function updateUIOnUserLogin() {
 /**
 *@returns handles the click of the star icon
 *Uses the user model to append the story to the user's favorites.
+1. first when the star icon is clicked, the story id is retrieved from the data attribute.
+2. the story is then retrieved from the story list.
+3. the story is then added to a set using lodash to avoid duplicates.
+4. the set is then converted to an array and stored in the local storage.
+5. the user favorites array is then pushed to the user.favorites array.
+6. the star icon is toggled to reflect the change in the user's favorites.
+the user story favorites id is then used to check if the story is already in the user's favorites.
+7. if the story is already favorited the star icon is set to tru in the local storage.
 */
 function handleSubmitStory(evt) {
 	console.debug("handleSubmitStory", evt)
@@ -173,6 +181,7 @@ function checkForFavoriteStories() {
 	if (localStorage.getItem("favorites")) {
 		let favorites = JSON.parse(localStorage.getItem("favorites"))
 		let savedFavStories = favorites.map((story) => story.storyId)
+		console.table(savedFavStories)
 		return savedFavStories
 	}
 }
@@ -202,8 +211,17 @@ function updateFavoriteStories() {
 }
 
 // !This is part of the user section of the ui logic will go here and not in stories.js which handles the api calls related to stories
-// todo update the ui section for favorited stories displayFavorires()
-
+// todo update the ui section for favorited stories displayFavorites()
+function displayFavorites(evt) {
+	// 1. hide the story list
+	$allStoriesList.hide()
+	// 2. use the generateStoriesMarkup function to generate the markup for the stories
+	let favStories = currentUser.favorites
+	let favStoriesMarkup = generateStoriesMarkup(favStories)
+	// 3. append the markup to the story list
+	$allStoriesList.append(favStoriesMarkup)
+	$allStoriesList.show()
+}
 
 
 
