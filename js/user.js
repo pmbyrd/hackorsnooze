@@ -138,10 +138,7 @@ function handleSubmitStory(evt) {
 	let $favId = $(this).attr("data-story-id")
 	let favStory = storyList.stories.find(story => story.storyId === $favId)
 	let favStoryId = favStory.storyId
-	// !pay attn to the order of intialization.
-	// *it makes more sense to check if a story is already in the local storage
-	// this should be checked globally
-	// use the star icon to add the story to the user's favorites
+	// !pay attn to the order of intialization.	
 	try {
 	  if ($(this).hasClass("far")) {
 		currentUser.favorites.push(favStory)
@@ -150,7 +147,6 @@ function handleSubmitStory(evt) {
 	} catch (err) {
 	  console.error("story not added", err)
 	}
-	
 	try {
 	  if($(this).hasClass("fas")) {
 		if (currentUser.favorites.includes(favStory)) {
@@ -173,7 +169,10 @@ $allStoriesList.on("click", ".fa-star", handleSubmitStory)
 // todo check for favorited stories in the session storage
 /**
  * 
- * @returns {Array} an array of story ids 
+ * @returns checks for favorited stories in the local storage.
+ * If the user is logged in, the story ids are retrieved from the local storage.
+ * The story ids are then returned.
+ * These story ids are used in the handling of favorited stories.
 */
 function checkForFavoriteStories() {
 	console.debug("checkForFavoriteStories")
@@ -187,9 +186,8 @@ function checkForFavoriteStories() {
 }
 
 /**
- * @returns Updates the ui for the favorite stories.
- * Filters through the story list and checks if the story ids are in the local storage.
- * If the story ids are in the local storage, the star icon is updated.
+ * @returns Filters through the story list to check if the story ids are in the story list.
+ * If the story ids are in the story list, the star icon is toggled to reflect the change in the user's favorites.
 **/
 function updateFavoriteStories() {
 	console.debug("updateFavoriteStories")
