@@ -2,7 +2,6 @@
 
 // global to hold the User instance of the currently-logged-in user
 let currentUser;
-
 /******************************************************************************
  * User login/signup/login
  */
@@ -25,6 +24,7 @@ async function login(evt) {
 
   saveUserCredentialsInLocalStorage();
   updateUIOnUserLogin();
+  updateFavorites()
 }
 
 $loginForm.on("submit", login);
@@ -58,6 +58,7 @@ $signupForm.on("submit", signup);
 
 function logout(evt) {
   console.debug("logout", evt);
+
   localStorage.clear();
   location.reload();
 }
@@ -132,98 +133,46 @@ function updateUIOnUserLogin() {
 the user story favorites id is then used to check if the story is already in the user's favorites.
 7. if the story is already favorited the star icon is set to tru in the local storage.
 */
-function handleSubmitStory(evt) {
-	console.debug("handleSubmitStory", evt)
 
-	let $favId = $(this).attr("data-story-id")
-	let favStory = storyList.stories.find(story => story.storyId === $favId)
-	let favStoryId = favStory.storyId
-	// !pay attn to the order of intialization.	
-	try {
-	  if ($(this).hasClass("far")) {
+
+// handle favorite story will be an async event that handles the clicking of the star icon
+function handleFavoriteStory(evt) {
+	console.debug("handleFavoriteStory", evt);
+	console.log("inside the handleFavoriteStory")
+	const favId = $(this).data("story-id")
+	// todo filter over the story list to find the story that matches the id, if it does that will be pushed into the user's favorites array, call update favorites to handle the logic of adding to the local storage 
+	const favStory = storyList.stories.find(story => story.storyId === favId)
+	console.log("favStory", favStory)
+
+	// updateFavorites()
+	$(this).hasClass("far") ? $(this).toggleClass("far fas") : $(this).toggleClass("fas far");
+	if ($(this).hasClass("far")) {
+		console.log(`this has class far ====>>>>> story NOT in favorites`, favId)
 		currentUser.favorites.push(favStory)
-		console.log("added to favorites")
-	  }
-	} catch (err) {
-	  console.error("story not added", err)
 	}
-	try {
-	  if($(this).hasClass("fas")) {
-		if (currentUser.favorites.includes(favStory)) {
-		  currentUser.favorites.splice(currentUser.favorites.indexOf(favStory), 1)
-		  console.log("removed from favorites")
-		}
-	  }
-	} catch (err) {
-	  console.error("story not removed", err)
+
+	if ($(this).hasClass("fas")) {
+		console.log(`this has class fas ====>>>>> story is IN favorites`, favId)
+		currentUser.favorites.splice(currentUser.favorites.indexOf(favStory), 1)
 	}
+	// updateFavorites()
 	console.table(currentUser.favorites)
-	$(this).toggleClass("fas far")
-
+	// return favStory
+	// get the story id
 }
-
-//todo implement the event listener for the star icon 
-$allStoriesList.on("click", ".fa-star", handleSubmitStory)
-
-
-// todo check for favorited stories in the session storage
-/**
- * 
- * @returns checks for favorited stories in the local storage.
- * If the user is logged in, the story ids are retrieved from the local storage.
- * The story ids are then returned.
- * These story ids are used in the handling of favorited stories.
-*/
-function checkForFavoriteStories() {
-	console.debug("checkForFavoriteStories")
-	if (currentUser === null) return
-	if (localStorage.getItem("favorites")) {
-		let favorites = JSON.parse(localStorage.getItem("favorites"))
-		let savedFavStories = favorites.map((story) => story.storyId)
-		console.table(savedFavStories)
-		return savedFavStories
-	}
-}
-
-/**
- * @returns Filters through the story list to check if the story ids are in the story list.
- * If the story ids are in the story list, the star icon is toggled to reflect the change in the user's favorites.
-**/
-function updateFavoriteStories() {
-	console.debug("updateFavoriteStories")
-	try {
-		// 1 get the story ids from the local storage
-		let savedFavStories = checkForFavoriteStories()
-		// 2 check if the story ids are in the story list
-		let favStories = storyList.stories.filter((story) => savedFavStories.includes(story.storyId))
-		// 3 if the story ids are in the story list, add the star icon to the story
-		if (favStories.length > 0) {
-			favStories.forEach((story) => {
-				let $storyId = $(`[data-story-id="${story.storyId}"]`)
-				$storyId.toggleClass("fas far")
-			})
-		}
-    } catch (err) {
-		console.error("error", err)
-    } 
-}
-
-// !This is part of the user section of the ui logic will go here and not in stories.js which handles the api calls related to stories
-// todo update the ui section for favorited stories displayFavorites()
-function displayFavorites(evt) {
-	// 1. hide the story list
-	$allStoriesList.hide()
-	// 2. use the generateStoriesMarkup function to generate the markup for the stories
-	let favStories = currentUser.favorites
-	let favStoriesMarkup = generateStoriesMarkup(favStories)
-	// 3. append the markup to the story list
-	$allStoriesList.append(favStoriesMarkup)
-	$allStoriesList.show()
-}
+console.trace(currentUser)
+$allStoriesList.on("click", ".fa-star", handleFavoriteStory);
 
 
+// *instead of multiple functions I will use one to handle the local storage update favorites can be called on page load and when a user favorites a story
+// async function updateFavorites() {
+// 	console.debug("updateFavorites");
+
+// 	if (currentUser.favorites.length > localStorage.getItem("favorites").length) {
+// 		console.log("the user has added a new favorite")
+// 		localStorage.setItem("favorites", JSON.stringify(currentUser.favorites));
+// 	}
 
 
-// TODO: update the nav link to listen for a a click on the favorites link
 
 
