@@ -48,3 +48,4 @@ function navSubmitClick(evt){
 // !keep concerns seperate.  User stories.js for story related functions
 
 
+// Todo : Add a click handler to the "Favorites" link in the nav bar. When clicked, it should call a function called navFavoritesClick. This function should hide all page components, then call a function called putFavoritesOnPage. This function should be defined in the stories.js file.

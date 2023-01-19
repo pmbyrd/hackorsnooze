@@ -17,8 +17,6 @@ const $navLogOut = $("#nav-logout");
 const $newStoryForm = $("#new-story-form");
 
 const $messages = $(".messages"); 
-const $favStories = $("#fav-stories");
-const $favoritesList = $("#favorites-list");
 
 
 
@@ -27,9 +25,7 @@ const $favoritesList = $("#favorites-list");
  * calling this, individual components can re-show just what they want.
  */
 // make function to display messages
-
 function displayMessage(message, type) {
-  console.debug("displayMessage", message, type);
   const $message = $(`<div class="alert alert-${type}">${message}</div>`);
   $(".messages").show().append($message).text(message);
   // remove the message after 3 seconds
@@ -55,6 +51,8 @@ async function start() {
   await checkForRememberedUser();
   await getAndShowStoriesOnStart();
 
+  // if we got a logged-in user
+  if (currentUser) updateUIOnUserLogin();
 }
 
 // Once the DOM is entirely loaded, begin the app
