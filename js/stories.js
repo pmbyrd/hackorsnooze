@@ -15,6 +15,7 @@ async function getAndShowStoriesOnStart() {
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
+ * - addFavorite: boolean to add a favorite button
  *
  * Returns the markup for the story.
  */
@@ -25,7 +26,9 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
+      <span class="fav">
+      <a href="#" class="star"> <i data-story-id="${story.storyId}" class="far fa-star"></i></a>
+      <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
