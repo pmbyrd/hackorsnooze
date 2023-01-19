@@ -155,19 +155,39 @@ async function handleFavoriteStory(evt) {
 $allStoriesList.on("click", ".fa-star", handleFavoriteStory)
 
 async function checkForUserFavorites() {
-  const favorites = JSON.parse(localStorage.getItem("favorites"));
+  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   if (favorites) {
-    currentUser.favorites = favorites;
-    favorites.forEach(story => {
-      $(`#star-${story.storyId}`).addClass("fas").removeClass("far");
+    $(".fa-star").each(function () {
+      const $storyId = $(this).data("story-id");
+      // if the story is in the favorites list, add the fas class
+      if (favorites.find(f => f.storyId === $storyId)) {
+        $(this).addClass("fas");
+      }
     });
   }
-  // Iterate through all the stories in the page
-  $(".fa-star").each(function () {
-    const $storyId = $(this).data("story-id");
-    // if the story is not in the favorites list, remove the fas class
-    if (!favorites.find(f => f.storyId === $storyId)) {
-      $(this).removeClass("fas");
-    }
-  });
+  updateFavorites();
 }
+
+// TOdo add the make sure the user favorites are updated to be the same as the local storage
+function updateFavorites() {
+  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+  currentUser.favorites = favorites;
+}
+
+// todo update the UI for the user's favorites
+console.warn("need to fix this function, generateStoryMarkup is not defined here")
+function putUserFavoritesOnPage() {
+  console.debug("putUserFavoritesOnPage");
+  if (currentUser) {
+    $favoritesList.empty();
+    for (let story of currentUser.favorites) {
+      const $story = generateStoryMarkup(story);
+      $favoritesList.append($story);
+    }
+  }
+  $allStoriesList.hide();
+  $favoritesList.show();
+}
+
+// TODO handle the click on the favorites tab
+$('#nav-favorites').on("click", putUserFavoritesOnPage);
