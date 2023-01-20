@@ -2,6 +2,7 @@
 
 /******************************************************************************
  * Handling navbar clicks and updating navbar
+ * // !keep concerns seperate.  User stories.js for story related functions
  */
 
 /** Show main list of all stories when click site name */
@@ -45,7 +46,15 @@ function navSubmitClick(evt){
   $newStoryForm.show();
 }
 
-// !keep concerns seperate.  User stories.js for story related functions
+// Todo add in a function for clicking on the hack or snooze logo
+function navHackOrSnoozeClick(evt){
+  console.debug("navHackOrSnoozeClick", evt);
+  $loginForm.hide()
+  $signupForm.hide()
+  $favoritesList.hide()
+  $ownStoriesList.hide()
+  $newStoryForm.hide()
+}
 
+$("#nav-all").on("click", navHackOrSnoozeClick);
 
-// Todo : Add a click handler to the "Favorites" link in the nav bar. When clicked, it should call a function called navFavoritesClick. This function should hide all page components, then call a function called putFavoritesOnPage. This function should be defined in the stories.js file.
