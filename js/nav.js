@@ -54,7 +54,8 @@ function navHackOrSnoozeClick(evt){
   $favoritesList.hide()
   $ownStoriesList.hide()
   $newStoryForm.hide()
+  checkForUserFavorites()
 }
 
-$("#nav-all").on("click", navHackOrSnoozeClick);
+$body.on("click", navHackOrSnoozeClick);
 

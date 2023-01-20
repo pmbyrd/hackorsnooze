@@ -156,7 +156,7 @@ $allStoriesList.on("click", ".fa-star", handleFavoriteStory)
 
 async function checkForUserFavorites() {
   const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-  if (favorites) {
+  if (favorites.length > 0) {
     $(".fa-star").each(function () {
       const $storyId = $(this).data("story-id");
       // if the story is in the favorites list, add the fas class
@@ -172,6 +172,8 @@ async function checkForUserFavorites() {
 function updateFavorites() {
   const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
   currentUser.favorites = favorites;
+  console.log("favorites", currentUser.favorites)
+  // console.log(checkForUserFavorites())
 }
 
 // todo update the UI for the user's favorites
@@ -201,6 +203,4 @@ async function putUserFavoritesOnPage() {
   $favoritesList.show();
 }
 
-// TODO handle the click on the favorites tab
-$('#nav-favorites').on("click", putUserFavoritesOnPage);
 
