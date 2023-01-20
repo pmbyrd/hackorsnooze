@@ -176,14 +176,26 @@ function updateFavorites() {
 
 // todo update the UI for the user's favorites
 console.warn("need to fix this function, generateStoryMarkup is not defined here")
-function putUserFavoritesOnPage() {
+async function putUserFavoritesOnPage() {
   console.debug("putUserFavoritesOnPage");
   if (currentUser) {
     $favoritesList.empty();
+    // loop over the item as a jQuery object
     for (let story of currentUser.favorites) {
-      const $story = generateStoryMarkup(story);
+      console.log(story, currentUser.favorites)
+      const $story = `<li id="${story.storyId}">
+      <span class="star"> 
+        <i class="fas fa-star" data-story-id="${story.storyId}"></i>
+        </span>
+        <a href="${story.url}" target="a_blank" class="story-link">${story.title}</a>
+        <small class="story-hostname">(${story.url})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+        </li>`
       $favoritesList.append($story);
     }
+    // $favoritesList.append($story);
+    // return $story;
   }
   $allStoriesList.hide();
   $favoritesList.show();
@@ -191,3 +203,4 @@ function putUserFavoritesOnPage() {
 
 // TODO handle the click on the favorites tab
 $('#nav-favorites').on("click", putUserFavoritesOnPage);
+
